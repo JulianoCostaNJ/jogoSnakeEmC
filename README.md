@@ -1,8 +1,3 @@
-Aqui vai um README pronto, direto e profissional pra você subir no GitHub 👇
-
----
-
-```markdown
 # 🐍 Snake Inteligente (C + BFS)
 
 Um jogo clássico da cobrinha desenvolvido em **C**, rodando no **console do Windows**, com suporte a **modo automático usando algoritmo BFS (Breadth-First Search)**.
