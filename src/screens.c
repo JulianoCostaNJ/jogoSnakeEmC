@@ -29,13 +29,16 @@ int menuNeedsRedraw     = 1;   /* Menu precisa de redesenho completo inicialment
 int gameoverNeedsRedraw = 1;
 int rankingNeedsRedraw  = 1;
 
+
 /* Indices de selecao */
 int menuIndex     = 0;   /* Opcao do menu (0=Jogar Manual, 1=Auto, 2=Ranking, 3=Sair) */
 int gameOverIndex = 0;   /* Opcao do game over (0=Jogar Novamente, 1=Menu) */
+int diffIndex = 0; // indice para navegação no submenu de dificuldade (0=Facil, 1=Medio, 2=Dificil)
 
 /* Cache: rastreiam o ultimo estado exibido para redesenho incremental */
 static int menuLastIndex      = -1;
 static int gameoverLastIndex  = -1;
+
 
 /* ================================================================
  * ARTE ASCII DO TITULO
@@ -281,6 +284,23 @@ void render_menu_screen(void) {
     }
 }
 
+/*=======================================================
+    sub menu de dificuldade
+=========================================================*/
+void render_difficulty_screen(void) {
+    if (menuNeedsRedraw) {
+        int L = 12, R = 67, T = 5, B = 20;// Dimensoes da caixa do submenu de dificuldade
+        screen_box(L, T, R, B, 11, 14); // Caixa Ciano
+        screen_center(L, R, T + 2, 14, "SELECIONE A DIFICULDADE");
+        menuNeedsRedraw = 0;
+    }
+    
+    const char *opts[] = { "FACIL (Sem Obstaculos)", "MEDIO (Poucos Obstaculos)", "DIFICIL (Muitos Obstaculos)" };
+    for (int i = 0; i < 3; i++) {
+        int color = (i == diffIndex) ? 14 : 8; // Amarelo se selecionado
+        screen_center(12, 67, 10 + (i * 2), color, opts[i]);
+    }
+}
 /* ================================================================
  * TELA: RANKING
  * ================================================================ */

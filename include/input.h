@@ -17,7 +17,7 @@
 #define INPUT_H
 
 #include "../include/constants.h"  /* GameState enum */
-
+extern int diffIndex;
 /*
  * input_menu: processa teclas na tela do menu principal.
  *
@@ -28,6 +28,16 @@
  *   ESC                     -> sair
  */
 void input_menu(GameState *state);
+/*
+ * input_difficulty: processa teclas na tela de selecao de dificuldade.
+ *
+ * Teclas reconhecidas:
+ *   W/S ou setas cima/baixo -> navega entre opcoes
+ *   Enter                   -> seleciona a opcao atual
+ *   1,2,3                   -> atalhos diretos para cada dificuldade
+ *   ESC                     -> volta ao menu
+ */
+void input_difficulty(GameState *state);
 
 /*
  * input_ranking: processa teclas na tela de ranking.

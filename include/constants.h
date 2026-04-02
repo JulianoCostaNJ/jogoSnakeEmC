@@ -207,12 +207,24 @@ typedef struct {
  */
 typedef enum {
     STATE_MENU = 0,   /* Exibindo menu principal */
+    STATE_DIFFICULTY, /* Exibindo selecao de dificuldade */
     STATE_PLAYING,    /* Partida em andamento */
     STATE_RANKING,    /* Exibindo tabela de recordes */
     STATE_GAMEOVER,   /* Partida encerrada, aguardando acao */
     STATE_EXIT        /* Sair do programa */
 } GameState;
 
+/*
+ * Difficulty: niveis de dificuldade do jogo, pode em implementações futuras
+ * afetar a velocidade inicial e crescimento da cobra.
+ * Usados para balanceamento e desafio progressivo.
+ */
+
+typedef enum {
+    DIFF_EASY = 0,
+    DIFF_MEDIUM,
+    DIFF_HARD
+} Difficulty;
 /*
  * Direction: direcao de movimento da cobra.
  * Importante: direcoes opostas (UP<->DOWN, LEFT<->RIGHT) nao podem ser

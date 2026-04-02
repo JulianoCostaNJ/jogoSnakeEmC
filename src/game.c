@@ -55,6 +55,7 @@ Fruit     fruits[FRUIT_COUNT];       /* Frutas ativas na arena */
 
 Segment   obstacles[OBSTACLE_COUNT]; /* Posicoes dos obstaculos */
 int       obstacleCount = 0;         /* Obstaculos gerados */
+int activeObstacleLimit = 20; /* Limite de obstaculos ativos, ajustado pela dificuldade */ 
 
 int score         = 0;    /* Pontuacao */
 int level         = 1;    /* Nivel atual */
@@ -99,6 +100,13 @@ int is_on_snake(int x, int y) {
  * is_obstacle: percorre obstacles[] procurando (x,y).
  * Complexidade O(OBSTACLE_COUNT): sempre pequeno (20 obstaculos).
  */
+
+void set_difficulty(Difficulty diff) {
+    if (diff == DIFF_EASY)   activeObstacleLimit = 0;
+    else if (diff == DIFF_MEDIUM) activeObstacleLimit = 8;
+    else                          activeObstacleLimit = 20; // Hard (macro original)
+}
+
 int is_obstacle(int x, int y) {
     for (int i = 0; i < obstacleCount; i++)
         if (obstacles[i].x == x && obstacles[i].y == y)
@@ -145,21 +153,24 @@ int arena_col(int logical_x) {
  *   - Maximo de 200 tentativas por obstaculo para evitar loop infinito
  */
 void spawn_obstacles(void) {
-    obstacleCount = 0;   /* Reseta contador */
-
+    obstacleCount = 0;
+    // ... lógica de sorteio ...
     /* Centro da arena: onde a cobra comeca */
     int mx = WIDTH / 2;
     int my = (TOP + HEIGHT) / 2;
-
-    for (int i = 0; i < OBSTACLE_COUNT && obstacleCount < OBSTACLE_COUNT; i++) {
-        int x, y, ok;
+       
+    for (int i = 0; i < activeObstacleLimit; i++) { 
+        // Lógica de geração atual...
+         int x, y, ok;
         int attempts = 0;
 
         do {
+            attempts++;
+            if (attempts > 200) break;   /* Evita loop infinito se arena lotada */
             ok = 1;   /* Assume posicao valida ate provar contrario */
 
             /* Posicao aleatoria dentro dos limites jogaveis */
-            x = rand() % WIDTH + 1;
+            x = rand() % WIDTH + 1; 
             y = rand() % (HEIGHT - TOP - 1) + TOP + 1;
 
             /* Zona de segurança ao redor do spawn da cobra */
@@ -171,9 +182,6 @@ void spawn_obstacles(void) {
             /* Nao pode sobrepor outro obstaculo ja colocado */
             if (is_obstacle(x, y)) { ok = 0; continue; }
 
-            attempts++;
-            if (attempts > 200) break;   /* Evita loop infinito se arena lotada */
-
         } while (!ok);
 
         if (attempts <= 200) {   /* Conseguiu posicionar dentro do limite */
@@ -182,6 +190,7 @@ void spawn_obstacles(void) {
             obstacleCount++;
         }
     }
+    
 }
 
 /* ================================================================

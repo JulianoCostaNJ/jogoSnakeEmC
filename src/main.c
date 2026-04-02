@@ -74,6 +74,12 @@ int main(void) {
             input_menu(&state);     /* Processa teclas do menu */
             Sleep(30);              /* ~33fps para o menu (baixo recurso) */
         }
+        else if (state == STATE_DIFFICULTY) {
+            render_difficulty_screen();/* desenha o submenu de dificuldade */
+            input_difficulty(&state);/* Processa teclas do submenu de dificuldade*/ 
+            Sleep(50);              
+        }
+        
 
         /* --------------------------------------------------------
          * ESTADO: RANKING

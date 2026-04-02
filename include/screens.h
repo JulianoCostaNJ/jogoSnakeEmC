@@ -26,6 +26,8 @@ extern int rankingNeedsRedraw;
 /* Indice da opcao selecionada em cada tela de selecao */
 extern int menuIndex;      /* 0-3: opcoes do menu principal */
 extern int gameOverIndex;  /* 0-1: "Jogar Novamente" ou "Voltar ao Menu" */
+extern int diffIndex; // indice para navegação no submenu de dificuldade (0=Facil, 1=Medio, 2=Dificil)
+
 
 /* ----------------------------------------------------------------
  * render_menu_screen: renderiza o menu principal.
@@ -43,6 +45,19 @@ extern int gameOverIndex;  /* 0-1: "Jogar Novamente" ou "Voltar ao Menu" */
  *   - Opcoes: apenas quando menuIndex muda
  * ---------------------------------------------------------------- */
 void render_menu_screen(void);
+/*------------------------------------------------------------------
+ * render_difficulty_screen: renderiza o submenu de dificuldade.
+ *
+ * Componentes:
+ *   - Titulo "SELECIONE A DIFICULDADE"
+ *   - 3 opcoes: Facil, Medio, Dificil
+ *   - Opcao selecionada em amarelo, as outras em cinza
+ *  - Cursor de selecao (setas << >>) ao redor da opcao selecionada
+ * - Redesenho:
+ *  - Estrutura completa: apenas quando menuNeedsRedraw = 1 (ao entrar no submenu)
+ * - Opcoes: apenas quando diffIndex muda
+ *------------------------------------------------------------------*/
+void render_difficulty_screen(void);
 
 /* ----------------------------------------------------------------
  * render_ranking_screen: exibe a tabela de recordes.

@@ -21,7 +21,6 @@
 #include "../include/render.h"     /* draw_pause_overlay, clear_pause_overlay, draw_bfs_* */
 #include "../include/screens.h"    /* flags menuNeedsRedraw, gameoverNeedsRedraw */
 #include "../include/bfs.h"        /* bfs_path_len, bfs_visited_count */
-
 /* ================================================================
  * INPUT DO MENU PRINCIPAL
  * ================================================================ */
@@ -56,15 +55,31 @@ void input_menu(GameState *state) {
     /* Teclas normais */
     if      (k == 'w' || k == 'W') { menuIndex--; if (menuIndex < 0) menuIndex = 3; }
     else if (k == 's' || k == 'S') { menuIndex++; if (menuIndex > 3) menuIndex = 0; }
-    else if (k == '1') { autoMode = 0; init_game(); menuNeedsRedraw = 1; *state = STATE_PLAYING; }
-    else if (k == '2') { autoMode = 1; init_game(); menuNeedsRedraw = 1; *state = STATE_PLAYING; }
+    else if (k == '1') {*state = STATE_DIFFICULTY;  autoMode = 0; init_game(); menuNeedsRedraw = 1; }
+    else if (k == '2') {  *state = STATE_DIFFICULTY; autoMode = 1; init_game(); menuNeedsRedraw = 1;}
     else if (k == '3') { rankingNeedsRedraw = 1; *state = STATE_RANKING; }
     else if (k == '4' || k == 27) { *state = STATE_EXIT; }   /* ESC ou '4' = sair */
     else if (k == 13) {   /* Enter: confirma opcao selecionada */
-        if      (menuIndex == 0) { autoMode = 0; init_game(); menuNeedsRedraw = 1; *state = STATE_PLAYING; }
-        else if (menuIndex == 1) { autoMode = 1; init_game(); menuNeedsRedraw = 1; *state = STATE_PLAYING; }
+        if      (menuIndex == 0) { *state = STATE_DIFFICULTY; autoMode = 0; init_game(); menuNeedsRedraw = 1; }
+        else if (menuIndex == 1) { *state = STATE_DIFFICULTY; autoMode = 1; init_game(); menuNeedsRedraw = 1; }
         else if (menuIndex == 2) { rankingNeedsRedraw = 1; *state = STATE_RANKING; }
         else                     { *state = STATE_EXIT; }
+    }
+}
+void input_difficulty(GameState *state) {
+    if (!_kbhit()) return;
+    int k = _getch();
+    if (k == 224) {
+        k = _getch();
+        if (k == 72) { diffIndex--; if (diffIndex < 0) diffIndex = 2; }
+        else if (k == 80) { diffIndex++; if (diffIndex > 2) diffIndex = 0; }
+    } else if (k == 13) { // Enter
+        set_difficulty((Difficulty)diffIndex);
+        init_game(); // Inicializa o mapa com a nova dificuldade
+        *state = STATE_PLAYING;
+    } else if (k == 27) { // ESC volta
+        menuNeedsRedraw = 1;
+        *state = STATE_MENU;
     }
 }
 
@@ -148,6 +163,8 @@ void input_game(GameState *state) {
     }
 
     /* Toggle: exibir/ocultar caminho BFS */
+    
+
     else if (k == 'v' || k == 'V') {
         showBfsPath = !showBfsPath;   /* Inverte o flag */
         if (!showBfsPath) {
@@ -158,15 +175,15 @@ void input_game(GameState *state) {
                 /* So apaga se nao ha outro elemento por cima */
                 if (!is_on_snake(px, py) && fruit_at(px, py) < 0 && !is_obstacle(px, py))
                     erase_cell(px, py);   /* Restaura fundo */
+                }
+            } else {
+                /* Exibindo: redesenha o overlay */
+                draw_bfs_path_overlay();
             }
-        } else {
-            /* Exibindo: redesenha o overlay */
-            draw_bfs_path_overlay();
         }
-    }
 
-    /* Toggle: exibir/ocultar celulas visitadas pelo BFS */
-    else if (k == 'g' || k == 'G') {
+        /* Toggle: exibir/ocultar celulas visitadas pelo BFS */
+        else if (k == 'g' || k == 'G') {
         showBfsVisit = !showBfsVisit;
         if (!showBfsVisit) {
             /* Ocultando: limpa todos os pontos verdes e redesenha a arena */
@@ -181,18 +198,17 @@ void input_game(GameState *state) {
             /* Se caminho ainda ativo: redesenha so o caminho */
             if (showBfsPath) draw_bfs_path_overlay();
         } else {
-            /* Exibindo: mostra a area explorada */
-            draw_bfs_visited_overlay();
-        }
+                /* Exibindo: mostra a area explorada */
+                draw_bfs_visited_overlay();
+            }
     }
 
     /* Toggle: alterna entre modo manual e automatico (BFS) */
     else if (k == 't' || k == 'T') {
-        autoMode = !autoMode;     /* Inverte o modo */
-        update_side_panel();      /* Atualiza indicador de modo no painel */
+            autoMode = !autoMode;     /* Inverte o modo */
+            update_side_panel();      /* Atualiza indicador de modo no painel */
     }
 }
-
 /* ================================================================
  * INPUT DA TELA DE GAME OVER
  * ================================================================ */
@@ -220,10 +236,10 @@ void input_gameover(GameState *state) {
 
     /* Atalhos diretos */
     else if (k == '1') {
-        init_game();
         gameoverNeedsRedraw = 1;
         menuNeedsRedraw     = 1;
-        *state = STATE_PLAYING;
+        *state = STATE_DIFFICULTY;
+
     }
     else if (k == '2') {
         menuNeedsRedraw     = 1;
@@ -235,10 +251,10 @@ void input_gameover(GameState *state) {
     else if (k == 13) {
         if (gameOverIndex == 0) {
             /* "Jogar Novamente": reinicia a partida */
-            init_game();
+        
             gameoverNeedsRedraw = 1;
             menuNeedsRedraw     = 1;
-            *state = STATE_PLAYING;
+            *state = STATE_DIFFICULTY;   /* Volta para a selecao de dificuldade */
         } else {
             /* "Voltar ao Menu": volta ao menu principal */
             menuNeedsRedraw     = 1;

@@ -34,6 +34,7 @@ extern Fruit  fruits[];       /* Array com todas as frutas ativas na arena */
 /* --- Obstaculos --- */
 extern Segment obstacles[];   /* Posicoes fixas dos obstaculos gerados aleatoriamente */
 extern int     obstacleCount; /* Quantos obstaculos foram colocados */
+extern int activeObstacleLimit; /* Limite de obstaculos ativos, ajustado pela dificuldade */
 
 /* --- Pontuacao e progressao --- */
 extern int score;         /* Pontuacao atual da partida */
@@ -81,6 +82,7 @@ int is_on_snake(int x, int y);
  */
 int is_obstacle(int x, int y);
 
+
 /*
  * fruit_at: retorna o indice da fruta em (x,y), ou -1 se nao houver.
  * Usado na deteccao de colisao (update_game) e nos overlays BFS.
@@ -108,6 +110,11 @@ int arena_col(int logical_x);
  *   - Desenha o estado inicial completo
  */
 void init_game(void);
+/* 
+ * set_difficulty: define a dificuldade do jogo.
+ * @param diff: nivel de dificuldade (Facil, Medio, Dificil)
+ */
+void set_difficulty(Difficulty diff);
 
 /*
  * update_game: executa um frame do jogo.
