@@ -9,7 +9,7 @@ Um jogo clássico da cobrinha desenvolvido em **C**, rodando no **console do Win
 - 🎮 Modo manual (controle pelo teclado)
 - 🤖 Modo automático com IA (BFS encontra o caminho até a fruta)
 - 🍎 Sistema de frutas com raridade (comum, rara, épica)
-- 🧱 Obstáculos gerados aleatoriamente
+- 🧱 Obstáculos gerados aleatoriamente conforme a dificuldade
 - 📈 Sistema de pontuação e níveis
 - 🏆 Ranking persistente
 - 🎨 Interface com cores e emojis (UTF-8)
@@ -115,7 +115,7 @@ Comer o máximo de frutas possível, aumentar a pontuação e sobreviver o maior
 ## 🛠️ Melhorias Futuras
 
 * [ ] Refatoração para reduzir variáveis globais
-* [ ] Menu de seleção de dificuldade de jogo
+* [✅] Menu de seleção de dificuldade de jogo
 * [ ] Otimização do BFS (evitar recalcular a cada frame)
 * [ ] Sistema de save/load mais robusto
 * [ ] Melhorias na IA (prevenção de becos sem saída)
